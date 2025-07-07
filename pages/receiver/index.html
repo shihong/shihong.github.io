@@ -13,12 +13,11 @@
 
   <body>
     <div id="msg"></div>
-    <video id="root">sss</video>
+    <video id="root"></video>
 
     <script type='text/javascript' src='//www.gstatic.com/cast/sdk/libs/receiver/2.0.0/cast_receiver.js'></script>
 
     <script type='text/javascript'>
-      let sendid=""
       window.onload = function() {
         window.castReceiverManager = cast.receiver.CastReceiverManager.getInstance();
 
@@ -34,10 +33,9 @@
         window.messageBus.onMessage = function(e) {
           var msg = JSON.parse(e.data);
 
-          if(msg=="start" && !sendid){
-            sendid = e.senderId;
+          if(msg=="start"){
             try{
-              window.messageBus.send(sendid, 'take initiative');
+              window.messageBus.send(e.senderId, 'take initiative');
               document.getElementById('msg').innerHTML ="sent"
             } catch (e) {
               document.getElementById('msg').innerHTML = JSON.stringify(e);
@@ -46,7 +44,7 @@
           }
 
           window.messageBus.send(e.senderId, 'ok');
-          document.getElementById('msg').innerHTML = msg.url+"****"+e.senderId; // Clear previous content
+          document.getElementById('msg').innerHTML = (msg.url||JSON.stringify(msg))+"****"+e.senderId; // Clear previous content
         };
 
         // initialize CastReceiverManager
