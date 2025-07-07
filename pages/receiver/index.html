@@ -13,11 +13,12 @@
 
   <body>
     <div id="msg"></div>
-    <video id="root"></video>
+    <video id="root">sss</video>
 
     <script type='text/javascript' src='//www.gstatic.com/cast/sdk/libs/receiver/2.0.0/cast_receiver.js'></script>
 
     <script type='text/javascript'>
+      let sendid=""
       window.onload = function() {
         window.castReceiverManager = cast.receiver.CastReceiverManager.getInstance();
 
@@ -29,17 +30,21 @@
         // messages on a custom namespace
         var ns = 'urn:x-cast:com.url.cast';
         window.messageBus = window.castReceiverManager.getCastMessageBus(ns);
-        try{
-        window.messageBus.send(ns, 'take initiative');
-        } catch (e) {
-          document.getElementById('root').innerHTML = JSON.stringify(e);
-        }
+
         window.messageBus.onMessage = function(e) {
           var msg = JSON.parse(e.data);
 
-          window.messageBus.send(e.senderId, 'ok');
+          if(msg=="start" && !sendid){
+            sendid = e.senderId;
+            try{
+              window.messageBus.send(sendid, 'take initiative');
+            } catch (e) {
+              document.getElementById('msg').innerHTML = JSON.stringify(e);
+            }
+          }
 
-          document.getElementById('root').innerHTML = msg.url+"****"+e.senderId; // Clear previous content
+          window.messageBus.send(e.senderId, 'ok');
+          document.getElementById('msg').innerHTML = msg.url+"****"+e.senderId; // Clear previous content
         };
 
         // initialize CastReceiverManager
