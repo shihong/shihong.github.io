@@ -38,9 +38,11 @@
             sendid = e.senderId;
             try{
               window.messageBus.send(sendid, 'take initiative');
+              document.getElementById('msg').innerHTML ="sent"
             } catch (e) {
               document.getElementById('msg').innerHTML = JSON.stringify(e);
             }
+            return
           }
 
           window.messageBus.send(e.senderId, 'ok');
