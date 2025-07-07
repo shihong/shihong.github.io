@@ -1,14 +1,30 @@
+<!doctype html>
 <html>
   <head>
-    <style>
-      body {
+    <meta charset="utf-8">
+    <!-- include CAF & your own player library -->
+    <style type="text/css">
+    html, body, video { /* fit the player to the screen's dimensions */
         margin: 0;
-      }
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        color: white;
+    }
+    .loader { /* primitive text-based loading indicator */
+        position: absolute;
+        inset: 0;
+        justify-content: center;
+        align-content: center;
+        font-size: 50px;
+    }
     </style>
-    <script type='text/javascript' src='//www.gstatic.com/cast/sdk/libs/receiver/2.0.0/cast_receiver.js'></script>
-    <script type="module" crossorigin src="/assets/index-Tn9fxRY2.js"></script>
+    <script src="//www.gstatic.com/cast/sdk/libs/caf_receiver/v3/cast_receiver_framework.js"></script>
+    <script src="//www.gstatic.com/cast/sdk/libs/devtools/debug_layer/caf_receiver_logger.js"></script>
+    <script type="module" crossorigin src="/assets/index-Dx0xWov-.js"></script>
   </head>
   <body>
-    <video id="nodeVideo" style="width:100vw; height:100vh" autoplay playsinline muted></video>
-  </body>
+    <div class="loader">Loading...</div>
+    <video></video>
+</body>
 </html>
