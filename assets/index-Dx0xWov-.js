@@ -29,27 +29,27 @@
 })()
 const i = 'uniqid',
   M = { iceServers: [] },
-  l = cast.framework.CastReceiverContext.getInstance(),
-  g = l.getPlayerManager(),
-  u = cast.debug.CastDebugLogger.getInstance(),
+  u = cast.framework.CastReceiverContext.getInstance(),
+  l = u.getPlayerManager(),
+  g = cast.debug.CastDebugLogger.getInstance(),
   m = document.querySelector('video'),
   n = 'urn:x-cast:oeuvre.signal',
-  d = l.getCurrentSession(),
+  d = u.getCurrentSession(),
   y = ({ isLoading: r }) => {
     document.querySelector('.loader').style.display = r ? 'block' : 'none'
   }
 m.addEventListener('loadeddata', () => y({ isLoading: !1 }))
-g.setMessageInterceptor(cast.framework.messages.MessageType.READY, (r) => {
+g.setEnabled(!0)
+g.showDebugLogs(!0)
+g.clearDebugLogs()
+g.setLevel(cast.debug.LoggerLevel.DEBUG)
+l.setMessageInterceptor(cast.framework.messages.MessageType.READY, (r) => {
   r.media.entity || (r.media.entity = r.media.contentId),
     (document.querySelector('.loader').innerHTML = 'loaded'),
-    y({ isLoading: !0 }),
-    u.setEnabled(!0),
-    u.showDebugLogs(!0),
-    u.clearDebugLogs(),
-    u.setLevel(cast.debug.LoggerLevel.DEBUG)
+    y({ isLoading: !0 })
   const a = new RTCPeerConnection(M)
   return (
-    l.addCustomMessageListener(n, async (s) => {
+    u.addCustomMessageListener(n, async (s) => {
       const o = { category: 'echo', data: s.data }
       switch ((d.sendMessage(n, o), JSON.parse(s.data).type)) {
         case 'offer':
@@ -86,11 +86,11 @@ g.setMessageInterceptor(cast.framework.messages.MessageType.READY, (r) => {
 })
 const L =
   ({ shouldPlay: r }) =>
-  (a) => (m[r ? 'play' : 'pause'](), g.broadcastStatus(!0), a)
-g.setMessageInterceptor(cast.framework.messages.MessageType.PAUSE, L({ shouldPlay: !1 }))
-g.setMessageInterceptor(cast.framework.messages.MessageType.PLAY, L({ shouldPlay: !0 }))
+  (a) => (m[r ? 'play' : 'pause'](), l.broadcastStatus(!0), a)
+l.setMessageInterceptor(cast.framework.messages.MessageType.PAUSE, L({ shouldPlay: !1 }))
+l.setMessageInterceptor(cast.framework.messages.MessageType.PLAY, L({ shouldPlay: !0 }))
 const f = new cast.framework.CastReceiverOptions()
 f.skipPlayersLoad = !0
 f.disableIdleTimeout = !0
 f.supportedCommands = cast.framework.messages.Command.ALL_BASIC_MEDIA
-l.start(f)
+u.start(f)
