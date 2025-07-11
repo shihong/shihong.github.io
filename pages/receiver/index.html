@@ -1,56 +1,17 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>URL Cast Receiver</title>
-
-    <style type='text/css'>
-      html, body {width: 100%; height: 100%; padding: 0; margin: 0;}
-      body {overflow:hidden; background: #FFF;}
-      #msg {width: 100%; height: 10%;}
-      #root {width: 100%; height: 90%;}
-    </style>
-  </head>
-
-  <body>
-    <div id="msg"></div>
-    <video id="root"></video>
-
-    <script type='text/javascript' src='//www.gstatic.com/cast/sdk/libs/receiver/2.0.0/cast_receiver.js'></script>
-
-    <script type='text/javascript'>
-      window.onload = function() {
-        window.castReceiverManager = cast.receiver.CastReceiverManager.getInstance();
-
-        castReceiverManager.onReady = function(event) {
-           document.getElementById('root').innerHTML = event.data;
-          window.castReceiverManager.setApplicationState('URL Cast ready...');
-        };
-
-        // messages on a custom namespace
-        var ns = 'urn:x-cast:com.url.cast';
-        window.messageBus = window.castReceiverManager.getCastMessageBus(ns);
-
-        window.messageBus.onMessage = function(e) {
-          var msg = JSON.parse(e.data);
-
-          if(msg=="start"){
-            try{
-              window.messageBus.send(e.senderId, 'take initiative');
-              document.getElementById('msg').innerHTML ="sent"
-            } catch (e) {
-              document.getElementById('msg').innerHTML = JSON.stringify(e);
-            }
-            return
-          }
-
-          window.messageBus.send(e.senderId, 'ok');
-          document.getElementById('msg').innerHTML = (msg.url||JSON.stringify(msg))+"****"+e.senderId; // Clear previous content
-        };
-
-        // initialize CastReceiverManager
-        window.castReceiverManager.start({statusText: 'URL Cast starting...'});
-      };
-
-    </script>
-  </body>
-</html>
+<head>
+  <base href="/" />
+	<script
+		src="https://www.gstatic.com/cast/sdk/libs/caf_receiver/v3/cast_receiver_framework.js"
+	></script>
+  <style>
+    body, #root, video {
+      margin: 0;
+      width: 100vw;
+      height: 100vh;
+    }
+  </style>
+  <script type="module" crossorigin src="/assets/index-bTqUyVDT.js"></script>
+</head>
+<body>
+  <div id="root"></div>
+</body>
